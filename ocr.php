@@ -1,29 +1,25 @@
 <?php
 
-$sourceDir = "words_5_pairs/";
-$ocrOutput = "ocr.txt";
+$sourceDir = "words_5_pairs";
+$ocrOutput = "ocr.json";
 
-$files = scandir($folder);
+chdir($sourceDir);
+
+$files = scandir(".");
 array_shift($files);
 array_shift($files);
 array_shift($files);
 
+$output = [];
 for ($i=1; $i < count($files); $i++) {
-
-}
-
-
-$lineData = json_decode(file_get_contents($pointsFile), true);
-
-$wordCounter = 1;
-foreach ($lineData as $name => $points) {
-	$prev = 0;
-	$points[] = 9999;
-	for ($i=0; $i < count($points); $i++) {
-	    $w2 = $width / 2;
-		exec("convert $sourceDir/$name.jpg -crop $w2x".($points[$i] - $prev)."+0+$prev $targetDir/{$wordCounter}_EN.jpg");
-		exec("convert $sourceDir/$name.jpg -crop $widthx".($points[$i] - $prev)."+$w2+$prev $targetDir/{$wordCounter}_TH.jpg");
-		$prev = $points[$i];
-		$wordCounter++;
+	if (strpos($files[$i], "EN") === false) {
+		continue;
 	}
+	exec("tesseract -l eng ".$files[$i]." output");
+	if (!is_readable("output.txt")) {
+		echo $files[$i]." OCR Failed.\n";
+		continue;
+	}
+	$output[$files[$i]] = rtrim(rtrim(file_get_contents("output.txt"), "\n"), "\f");
+	file_put_contents($ocrOutput, json_encode($output, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 }
