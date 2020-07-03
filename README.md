@@ -23,3 +23,6 @@ Create an algorithm to rename all  files to their correct position in the pdf, t
   - for word ablaze(Page1) you should have 2 images: 4_EN and 4_TH 
   - for word accept(Page1) you should have 2 images: 21_EN and 21_TH 
   - for word acquire(Page2) you should have 2 images: 40_EN and 40_TH 
+
+
+#### Checkout the other branch for solutions ;)
